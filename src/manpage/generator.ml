@@ -480,6 +480,15 @@ and item ~nested (l : Item.t list) = match l with
         | doc -> env "fi" "nf" "" (indent 2 (break ++ block doc))
       in
       decl ++ doc ++ continue rest
+    | DualDeclaration { kind = _; anchor = _; content1; content2 = _; doc } ->
+      let decl =
+        documentedSrc content1
+      in
+      let doc = match doc with
+        | [] -> noop
+        | doc -> env "fi" "nf" "" (indent 2 (break ++ block doc))
+      in
+      decl ++ doc ++ continue rest
     | Include { kind = _; anchor = _;
       content = { summary; status; content }; doc } ->
       let d = if inline_subpage status then

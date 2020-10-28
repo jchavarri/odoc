@@ -67,6 +67,7 @@ module Toc = struct
   let classify ~on_sub (i : Item.t) : _ Rewire.action = match i with
     | Text _
     | Declaration _
+    | DualDeclaration _
       -> Skip
     | Include { content = { status; content; _ }; _ } ->
       if on_sub status then
@@ -103,6 +104,7 @@ module Subpages = struct
       | Item.Text _ -> []
       | Heading _ -> []
       | Declaration { content ; _ } -> walk_documentedsrc content
+      | DualDeclaration { content1 ; _ } -> walk_documentedsrc content1
       | Include i -> walk_items i.content.content
     )
 
@@ -184,6 +186,12 @@ module Shift = struct
         { decl with content = walk_documentedsrc ~on_sub shift_state decl.content }
       in
       Declaration decl :: walk_item ~on_sub shift_state rest
+    | DualDeclaration decl :: rest ->
+      let decl =
+        { decl with content1 = walk_documentedsrc ~on_sub shift_state decl.content1;
+        content2 = walk_documentedsrc ~on_sub shift_state decl.content2;  }
+      in
+      DualDeclaration decl :: walk_item ~on_sub shift_state rest
     | Text txt :: rest ->
       Text txt :: walk_item ~on_sub shift_state rest
 

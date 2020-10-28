@@ -320,6 +320,7 @@ let rec is_only_text l =
   let is_text : Item.t -> _ = function
     | Heading _ | Text _ -> true
     | Declaration _
+    | DualDeclaration _
       -> false
     |  Include { content = items; _ }
       -> is_only_text items.content
@@ -407,6 +408,14 @@ and items l =
 
     | Declaration {Item. kind=_; anchor ; content ; doc} :: rest ->
       let content =  label anchor @ documentedSrc content in
+      let elts = match doc with
+        | [] -> content @ [Break Line]
+        | docs -> content @ [ Indented (block ~in_source:true docs); Break Separation]
+      in
+      continue_with rest elts
+
+    | DualDeclaration {Item. kind=_; anchor ; content1; content2=_ ; doc} :: rest ->
+      let content =  label anchor @ documentedSrc content1 in
       let elts = match doc with
         | [] -> content @ [Break Line]
         | docs -> content @ [ Indented (block ~in_source:true docs); Break Separation]

@@ -215,15 +215,20 @@ let rec is_only_text l =
   let is_text : Item.t -> _ = function
     | Heading _ | Text _ -> true
     | Declaration _
+    | DualDeclaration _
       -> false
     | Include { content = { content; _ }; _ }
       -> is_only_text content
   in
   List.for_all is_text l
 
-let class_of_kind kind = match kind with
-  | Some spec -> class_ ["spec"; spec]
-  | None -> []
+let class_of_lang = function
+| `re -> "lang-reason"
+| `ml -> "lang-ocaml"
+
+let class_of_kind ~lang kind = match kind with
+  | Some spec -> class_ ["spec"; spec; class_of_lang lang]
+  | None -> class_ [class_of_lang lang]
 
 let rec documentedSrc ~resolve (t : DocumentedSrc.t) : item Html.elt list =
   let open DocumentedSrc in
@@ -320,7 +325,7 @@ and items ~resolve l : item Html.elt list =
         | `Default -> mk !Tree.open_details
       in
       let anchor_attrib, anchor_link = mk_anchor anchor in
-      let a = class_of_kind kind @ anchor_attrib in
+      let a = class_of_kind ~lang:`ml kind @ anchor_attrib in
       (* TODO : Why double div ??? *)
       [Html.div [Html.div ~a
             (anchor_link @ [Html.div ~a:[Html.a_class ["doc"]]
@@ -329,7 +334,7 @@ and items ~resolve l : item Html.elt list =
 
     | Declaration {Item. kind; anchor ; content ; doc} :: rest ->
       let anchor_attrib, anchor_link = mk_anchor anchor in
-      let a = class_of_kind kind @ anchor_attrib in
+      let a = class_of_kind ~lang:`ml kind @ anchor_attrib in
       let content = anchor_link @ documentedSrc ~resolve content in
       let elts = match doc with
         | [] ->
@@ -337,6 +342,22 @@ and items ~resolve l : item Html.elt list =
         | docs ->
           [div [
               div ~a content;
+              div (flow_to_item @@ block ~resolve docs);
+            ]]
+      in
+      continue_with rest elts
+    | DualDeclaration {Item. kind; anchor ; content1; content2 ; doc} :: rest ->
+      let anchor_attrib, anchor_link = mk_anchor anchor in
+      let a ~lang = class_of_kind ~lang kind @ anchor_attrib in
+      let content1 = anchor_link @ documentedSrc ~resolve content1 in
+      let content2 = anchor_link @ documentedSrc ~resolve content2 in
+      let elts = match doc with
+        | [] ->
+          [div ~a:(a `re) content1; div ~a:(a `ml) content2]
+        | docs ->
+          [div [
+              div ~a:(a `re) content1;
+              div ~a:(a `ml) content2;
               div (flow_to_item @@ block ~resolve docs);
             ]]
       in

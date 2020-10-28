@@ -158,6 +158,14 @@ and Item : sig
     doc : Block.t ;
   }
 
+  type 'a dual_item = {
+    kind : string option ;
+    anchor : Url.Anchor.t option ;
+    content1 : 'a ;
+    content2 : 'a ;
+    doc : Block.t ;
+  }
+
   type declaration = DocumentedSrc.t item
   type text = Block.t
 
@@ -165,6 +173,7 @@ and Item : sig
     | Text of text
     | Heading of Heading.t
     | Declaration of DocumentedSrc.t item
+    | DualDeclaration of DocumentedSrc.t dual_item
     | Include of Include.t item
 
 end = Item
