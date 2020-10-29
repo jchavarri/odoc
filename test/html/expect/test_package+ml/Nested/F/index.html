@@ -11,6 +11,47 @@
   <script>
    hljs.initHighlightingOnLoad();
   </script>
+  <script>
+   document.addEventListener('DOMContentLoaded', () => {
+        const SYNTAXES = ['ocaml', 'reason']
+        const CLASS_PREFIX = 'syntax__'
+        const ocamlInputId = 'radio-ocaml'
+        const reasonInputId = 'radio-reason'
+        let $toggleSyntaxDiv = document.createElement('div')
+        let currentSyntax = localStorage.getItem('syntax') || SYNTAXES[0]
+        let checked = `checked="checked"`
+        
+        $toggleSyntaxDiv.innerHTML = `
+          <div style="float:right;">
+            <input type="radio" id="${ocamlInputId}" name="syntax" value="ocaml" ${currentSyntax == 'ocaml' ? checked : ""}>
+            <label for="${ocamlInputId}"><code>ml</code></label>
+            <input type="radio" id="${reasonInputId}" name="syntax" value="reason" ${currentSyntax == 'reason' ? checked : ""}>
+            <label for="${reasonInputId}"><code>re</code></label>
+          </div>
+        `.trim()
+        $toggleSyntaxDiv = $toggleSyntaxDiv.firstChild
+        document.querySelector('body > nav').appendChild($toggleSyntaxDiv);
+  
+        let setCurrentSyntax = (syntax) => {
+          document.body.classList.remove(`${CLASS_PREFIX}${currentSyntax}`)
+          document.body.classList.add(`${CLASS_PREFIX}${syntax}`)
+  
+          currentSyntax = syntax
+          localStorage.setItem('syntax', currentSyntax)
+        }
+  
+        setCurrentSyntax(currentSyntax)
+  
+        const $ocamlInputEl = document.getElementById(ocamlInputId);
+        $ocamlInputEl.addEventListener('click', (el) => {
+          setCurrentSyntax(el.target.value)
+        })
+        const $reasonInputEl = document.getElementById(reasonInputId)
+        $reasonInputEl.addEventListener('click', (el) => {
+          setCurrentSyntax(el.target.value)
+        })
+      })
+  </script>
  </head>
  <body>
   <nav>
@@ -44,10 +85,10 @@
    <h2 id="parameters">
     <a href="#parameters" class="anchor"></a>Parameters
    </h2>
-   <div class="spec parameter lang-ocaml" id="argument-1-Arg1">
+   <div class="spec parameter syntax-ocaml" id="argument-1-Arg1">
     <a href="#argument-1-Arg1" class="anchor"></a><code><span class="keyword">module</span> <a href="argument-1-Arg1/index.html">Arg1</a> : <a href="../module-type-Y/index.html">Y</a></code>
    </div>
-   <div class="spec parameter lang-ocaml" id="argument-2-Arg2">
+   <div class="spec parameter syntax-ocaml" id="argument-2-Arg2">
     <a href="#argument-2-Arg2" class="anchor"></a><code><span class="keyword">module</span> <a href="argument-2-Arg2/index.html">Arg2</a> : <span class="keyword">sig</span> ... <span class="keyword">end</span></code>
    </div>
    <h2 id="signature">
@@ -57,8 +98,11 @@
     <a href="#type" class="anchor"></a>Type
    </h2>
    <div>
-    <div class="spec type lang-ocaml" id="type-t">
+    <div class="spec type syntax-ocaml" id="type-t">
      <a href="#type-t" class="anchor"></a><code><span class="keyword">type</span> t = <a href="argument-1-Arg1/index.html#type-t">Arg1.t</a> * <a href="argument-2-Arg2/index.html#type-t">Arg2.t</a></code>
+    </div>
+    <div class="spec type syntax-reason" id="type-t">
+     <a href="#type-t" class="anchor"></a><code><span class="keyword">type</span> t = <span>(<a href="argument-1-Arg1/index.html#type-t">Arg1.t</a>, <a href="argument-2-Arg2/index.html#type-t">Arg2.t</a>)</span>;</code>
     </div>
     <div>
      <p>

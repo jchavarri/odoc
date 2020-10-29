@@ -11,6 +11,47 @@
   <script>
    hljs.initHighlightingOnLoad();
   </script>
+  <script>
+   document.addEventListener('DOMContentLoaded', () => {
+        const SYNTAXES = ['ocaml', 'reason']
+        const CLASS_PREFIX = 'syntax__'
+        const ocamlInputId = 'radio-ocaml'
+        const reasonInputId = 'radio-reason'
+        let $toggleSyntaxDiv = document.createElement('div')
+        let currentSyntax = localStorage.getItem('syntax') || SYNTAXES[0]
+        let checked = `checked="checked"`
+        
+        $toggleSyntaxDiv.innerHTML = `
+          <div style="float:right;">
+            <input type="radio" id="${ocamlInputId}" name="syntax" value="ocaml" ${currentSyntax == 'ocaml' ? checked : ""}>
+            <label for="${ocamlInputId}"><code>ml</code></label>
+            <input type="radio" id="${reasonInputId}" name="syntax" value="reason" ${currentSyntax == 'reason' ? checked : ""}>
+            <label for="${reasonInputId}"><code>re</code></label>
+          </div>
+        `.trim()
+        $toggleSyntaxDiv = $toggleSyntaxDiv.firstChild
+        document.querySelector('body > nav').appendChild($toggleSyntaxDiv);
+  
+        let setCurrentSyntax = (syntax) => {
+          document.body.classList.remove(`${CLASS_PREFIX}${currentSyntax}`)
+          document.body.classList.add(`${CLASS_PREFIX}${syntax}`)
+  
+          currentSyntax = syntax
+          localStorage.setItem('syntax', currentSyntax)
+        }
+  
+        setCurrentSyntax(currentSyntax)
+  
+        const $ocamlInputEl = document.getElementById(ocamlInputId);
+        $ocamlInputEl.addEventListener('click', (el) => {
+          setCurrentSyntax(el.target.value)
+        })
+        const $reasonInputEl = document.getElementById(reasonInputId)
+        $reasonInputEl.addEventListener('click', (el) => {
+          setCurrentSyntax(el.target.value)
+        })
+      })
+  </script>
  </head>
  <body>
   <nav>
@@ -22,10 +63,10 @@
    </h1>
   </header>
   <div class="content">
-   <div class="spec module lang-ocaml" id="module-Foo__X">
+   <div class="spec module syntax-ocaml" id="module-Foo__X">
     <a href="#module-Foo__X" class="anchor"></a><code><span class="keyword">module</span> <a href="Foo__X/index.html">Foo__X</a>: { ... };</code>
    </div>
-   <div class="spec module lang-ocaml" id="module-X">
+   <div class="spec module syntax-ocaml" id="module-X">
     <a href="#module-X" class="anchor"></a><code><span class="keyword">module</span> <a href="X/index.html">X</a>: { ... };</code>
    </div>
   </div>

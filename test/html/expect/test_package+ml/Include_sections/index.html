@@ -11,6 +11,47 @@
   <script>
    hljs.initHighlightingOnLoad();
   </script>
+  <script>
+   document.addEventListener('DOMContentLoaded', () => {
+        const SYNTAXES = ['ocaml', 'reason']
+        const CLASS_PREFIX = 'syntax__'
+        const ocamlInputId = 'radio-ocaml'
+        const reasonInputId = 'radio-reason'
+        let $toggleSyntaxDiv = document.createElement('div')
+        let currentSyntax = localStorage.getItem('syntax') || SYNTAXES[0]
+        let checked = `checked="checked"`
+        
+        $toggleSyntaxDiv.innerHTML = `
+          <div style="float:right;">
+            <input type="radio" id="${ocamlInputId}" name="syntax" value="ocaml" ${currentSyntax == 'ocaml' ? checked : ""}>
+            <label for="${ocamlInputId}"><code>ml</code></label>
+            <input type="radio" id="${reasonInputId}" name="syntax" value="reason" ${currentSyntax == 'reason' ? checked : ""}>
+            <label for="${reasonInputId}"><code>re</code></label>
+          </div>
+        `.trim()
+        $toggleSyntaxDiv = $toggleSyntaxDiv.firstChild
+        document.querySelector('body > nav').appendChild($toggleSyntaxDiv);
+  
+        let setCurrentSyntax = (syntax) => {
+          document.body.classList.remove(`${CLASS_PREFIX}${currentSyntax}`)
+          document.body.classList.add(`${CLASS_PREFIX}${syntax}`)
+  
+          currentSyntax = syntax
+          localStorage.setItem('syntax', currentSyntax)
+        }
+  
+        setCurrentSyntax(currentSyntax)
+  
+        const $ocamlInputEl = document.getElementById(ocamlInputId);
+        $ocamlInputEl.addEventListener('click', (el) => {
+          setCurrentSyntax(el.target.value)
+        })
+        const $reasonInputEl = document.getElementById(reasonInputId)
+        $reasonInputEl.addEventListener('click', (el) => {
+          setCurrentSyntax(el.target.value)
+        })
+      })
+  </script>
  </head>
  <body>
   <nav>
@@ -70,7 +111,7 @@
   </nav>
   <div class="content">
    <div>
-    <div class="spec module-type lang-ocaml" id="module-type-Something">
+    <div class="spec module-type syntax-ocaml" id="module-type-Something">
      <a href="#module-type-Something" class="anchor"></a><code><span class="keyword">module</span> <span class="keyword">type</span> <a href="module-type-Something/index.html">Something</a> = <span class="keyword">sig</span> ... <span class="keyword">end</span></code>
     </div>
     <div>
@@ -85,9 +126,9 @@
     </p>
    </aside>
    <div>
-    <div class="spec include lang-ocaml">
+    <div class="spec include syntax-ocaml">
      <div class="doc">
-      <div class="spec value lang-ocaml" id="val-something">
+      <div class="spec value syntax-ocaml" id="val-something">
        <a href="#val-something" class="anchor"></a><code><span class="keyword">val</span> something : unit</code>
       </div>
       <h2 id="something-1">
@@ -98,14 +139,14 @@
         foo
        </p>
       </aside>
-      <div class="spec value lang-ocaml" id="val-foo">
+      <div class="spec value syntax-ocaml" id="val-foo">
        <a href="#val-foo" class="anchor"></a><code><span class="keyword">val</span> foo : unit</code>
       </div>
       <h3 id="something-2">
        <a href="#something-2" class="anchor"></a>Something 2
       </h3>
       <div>
-       <div class="spec value lang-ocaml" id="val-bar">
+       <div class="spec value syntax-ocaml" id="val-bar">
         <a href="#val-bar" class="anchor"></a><code><span class="keyword">val</span> bar : unit</code>
        </div>
        <div>
@@ -134,9 +175,9 @@
     </p>
    </aside>
    <div>
-    <div class="spec include lang-ocaml">
+    <div class="spec include syntax-ocaml">
      <div class="doc">
-      <div class="spec value lang-ocaml" id="val-something">
+      <div class="spec value syntax-ocaml" id="val-something">
        <a href="#val-something" class="anchor"></a><code><span class="keyword">val</span> something : unit</code>
       </div>
       <h3 id="something-1">
@@ -147,14 +188,14 @@
         foo
        </p>
       </aside>
-      <div class="spec value lang-ocaml" id="val-foo">
+      <div class="spec value syntax-ocaml" id="val-foo">
        <a href="#val-foo" class="anchor"></a><code><span class="keyword">val</span> foo : unit</code>
       </div>
       <h4 id="something-2">
        <a href="#something-2" class="anchor"></a>Something 2
       </h4>
       <div>
-       <div class="spec value lang-ocaml" id="val-bar">
+       <div class="spec value syntax-ocaml" id="val-bar">
         <a href="#val-bar" class="anchor"></a><code><span class="keyword">val</span> bar : unit</code>
        </div>
        <div>
@@ -183,9 +224,9 @@
     </p>
    </aside>
    <div>
-    <div class="spec include lang-ocaml">
+    <div class="spec include syntax-ocaml">
      <div class="doc">
-      <div class="spec value lang-ocaml" id="val-something">
+      <div class="spec value syntax-ocaml" id="val-something">
        <a href="#val-something" class="anchor"></a><code><span class="keyword">val</span> something : unit</code>
       </div>
       <h4 id="something-1">
@@ -196,14 +237,14 @@
         foo
        </p>
       </aside>
-      <div class="spec value lang-ocaml" id="val-foo">
+      <div class="spec value syntax-ocaml" id="val-foo">
        <a href="#val-foo" class="anchor"></a><code><span class="keyword">val</span> foo : unit</code>
       </div>
       <h5 id="something-2">
        <a href="#something-2" class="anchor"></a>Something 2
       </h5>
       <div>
-       <div class="spec value lang-ocaml" id="val-bar">
+       <div class="spec value syntax-ocaml" id="val-bar">
         <a href="#val-bar" class="anchor"></a><code><span class="keyword">val</span> bar : unit</code>
        </div>
        <div>
@@ -229,13 +270,13 @@
     </p>
    </aside>
    <div>
-    <div class="spec include lang-ocaml">
+    <div class="spec include syntax-ocaml">
      <div class="doc">
       <details open="open">
        <summary>
         <span class="def"><code><span class="keyword">include</span> <a href="module-type-Something/index.html">Something</a></code></span>
        </summary>
-       <div class="spec value lang-ocaml" id="val-something">
+       <div class="spec value syntax-ocaml" id="val-something">
         <a href="#val-something" class="anchor"></a><code><span class="keyword">val</span> something : unit</code>
        </div>
        <h2 id="something-1">
@@ -246,14 +287,14 @@
          foo
         </p>
        </aside>
-       <div class="spec value lang-ocaml" id="val-foo">
+       <div class="spec value syntax-ocaml" id="val-foo">
         <a href="#val-foo" class="anchor"></a><code><span class="keyword">val</span> foo : unit</code>
        </div>
        <h3 id="something-2">
         <a href="#something-2" class="anchor"></a>Something 2
        </h3>
        <div>
-        <div class="spec value lang-ocaml" id="val-bar">
+        <div class="spec value syntax-ocaml" id="val-bar">
          <a href="#val-bar" class="anchor"></a><code><span class="keyword">val</span> bar : unit</code>
         </div>
         <div>

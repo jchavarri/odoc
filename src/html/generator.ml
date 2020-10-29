@@ -223,8 +223,8 @@ let rec is_only_text l =
   List.for_all is_text l
 
 let class_of_lang = function
-| `re -> "lang-reason"
-| `ml -> "lang-ocaml"
+| `re -> "syntax-reason"
+| `ml -> "syntax-ocaml"
 
 let class_of_kind ~lang kind = match kind with
   | Some spec -> class_ ["spec"; spec; class_of_lang lang]
@@ -353,11 +353,11 @@ and items ~resolve l : item Html.elt list =
       let content2 = anchor_link @ documentedSrc ~resolve content2 in
       let elts = match doc with
         | [] ->
-          [div ~a:(a `re) content1; div ~a:(a `ml) content2]
+          [div ~a:(a `ml) content1; div ~a:(a `re) content2]
         | docs ->
           [div [
-              div ~a:(a `re) content1;
-              div ~a:(a `ml) content2;
+              div ~a:(a `ml) content1;
+              div ~a:(a `re) content2;
               div (flow_to_item @@ block ~resolve docs);
             ]]
       in

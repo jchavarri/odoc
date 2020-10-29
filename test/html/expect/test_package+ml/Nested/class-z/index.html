@@ -11,6 +11,47 @@
   <script>
    hljs.initHighlightingOnLoad();
   </script>
+  <script>
+   document.addEventListener('DOMContentLoaded', () => {
+        const SYNTAXES = ['ocaml', 'reason']
+        const CLASS_PREFIX = 'syntax__'
+        const ocamlInputId = 'radio-ocaml'
+        const reasonInputId = 'radio-reason'
+        let $toggleSyntaxDiv = document.createElement('div')
+        let currentSyntax = localStorage.getItem('syntax') || SYNTAXES[0]
+        let checked = `checked="checked"`
+        
+        $toggleSyntaxDiv.innerHTML = `
+          <div style="float:right;">
+            <input type="radio" id="${ocamlInputId}" name="syntax" value="ocaml" ${currentSyntax == 'ocaml' ? checked : ""}>
+            <label for="${ocamlInputId}"><code>ml</code></label>
+            <input type="radio" id="${reasonInputId}" name="syntax" value="reason" ${currentSyntax == 'reason' ? checked : ""}>
+            <label for="${reasonInputId}"><code>re</code></label>
+          </div>
+        `.trim()
+        $toggleSyntaxDiv = $toggleSyntaxDiv.firstChild
+        document.querySelector('body > nav').appendChild($toggleSyntaxDiv);
+  
+        let setCurrentSyntax = (syntax) => {
+          document.body.classList.remove(`${CLASS_PREFIX}${currentSyntax}`)
+          document.body.classList.add(`${CLASS_PREFIX}${syntax}`)
+  
+          currentSyntax = syntax
+          localStorage.setItem('syntax', currentSyntax)
+        }
+  
+        setCurrentSyntax(currentSyntax)
+  
+        const $ocamlInputEl = document.getElementById(ocamlInputId);
+        $ocamlInputEl.addEventListener('click', (el) => {
+          setCurrentSyntax(el.target.value)
+        })
+        const $reasonInputEl = document.getElementById(reasonInputId)
+        $reasonInputEl.addEventListener('click', (el) => {
+          setCurrentSyntax(el.target.value)
+        })
+      })
+  </script>
  </head>
  <body>
   <nav>
@@ -36,7 +77,7 @@
   </nav>
   <div class="content">
    <div>
-    <div class="spec instance-variable lang-ocaml" id="val-y">
+    <div class="spec instance-variable syntax-ocaml" id="val-y">
      <a href="#val-y" class="anchor"></a><code><span class="keyword">val</span> y : int</code>
     </div>
     <div>
@@ -45,14 +86,14 @@
      </p>
     </div>
    </div>
-   <div class="spec instance-variable lang-ocaml" id="val-y'">
+   <div class="spec instance-variable syntax-ocaml" id="val-y'">
     <a href="#val-y'" class="anchor"></a><code><span class="keyword">val</span> <span class="keyword">mutable</span> <span class="keyword">virtual</span> y' : int</code>
    </div>
    <h2 id="methods">
     <a href="#methods" class="anchor"></a>Methods
    </h2>
    <div>
-    <div class="spec method lang-ocaml" id="method-z">
+    <div class="spec method syntax-ocaml" id="method-z">
      <a href="#method-z" class="anchor"></a><code><span class="keyword">method</span> z : int</code>
     </div>
     <div>
@@ -61,7 +102,7 @@
      </p>
     </div>
    </div>
-   <div class="spec method lang-ocaml" id="method-z'">
+   <div class="spec method syntax-ocaml" id="method-z'">
     <a href="#method-z'" class="anchor"></a><code><span class="keyword">method</span> <span class="keyword">private</span> <span class="keyword">virtual</span> z' : int</code>
    </div>
   </div>

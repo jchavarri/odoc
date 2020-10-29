@@ -11,6 +11,47 @@
   <script>
    hljs.initHighlightingOnLoad();
   </script>
+  <script>
+   document.addEventListener('DOMContentLoaded', () => {
+        const SYNTAXES = ['ocaml', 'reason']
+        const CLASS_PREFIX = 'syntax__'
+        const ocamlInputId = 'radio-ocaml'
+        const reasonInputId = 'radio-reason'
+        let $toggleSyntaxDiv = document.createElement('div')
+        let currentSyntax = localStorage.getItem('syntax') || SYNTAXES[0]
+        let checked = `checked="checked"`
+        
+        $toggleSyntaxDiv.innerHTML = `
+          <div style="float:right;">
+            <input type="radio" id="${ocamlInputId}" name="syntax" value="ocaml" ${currentSyntax == 'ocaml' ? checked : ""}>
+            <label for="${ocamlInputId}"><code>ml</code></label>
+            <input type="radio" id="${reasonInputId}" name="syntax" value="reason" ${currentSyntax == 'reason' ? checked : ""}>
+            <label for="${reasonInputId}"><code>re</code></label>
+          </div>
+        `.trim()
+        $toggleSyntaxDiv = $toggleSyntaxDiv.firstChild
+        document.querySelector('body > nav').appendChild($toggleSyntaxDiv);
+  
+        let setCurrentSyntax = (syntax) => {
+          document.body.classList.remove(`${CLASS_PREFIX}${currentSyntax}`)
+          document.body.classList.add(`${CLASS_PREFIX}${syntax}`)
+  
+          currentSyntax = syntax
+          localStorage.setItem('syntax', currentSyntax)
+        }
+  
+        setCurrentSyntax(currentSyntax)
+  
+        const $ocamlInputEl = document.getElementById(ocamlInputId);
+        $ocamlInputEl.addEventListener('click', (el) => {
+          setCurrentSyntax(el.target.value)
+        })
+        const $reasonInputEl = document.getElementById(reasonInputId)
+        $reasonInputEl.addEventListener('click', (el) => {
+          setCurrentSyntax(el.target.value)
+        })
+      })
+  </script>
  </head>
  <body>
   <nav>
@@ -22,31 +63,31 @@
    </h1>
   </header>
   <div class="content">
-   <div class="spec class-type lang-ocaml" id="class-type-empty">
+   <div class="spec class-type syntax-ocaml" id="class-type-empty">
     <a href="#class-type-empty" class="anchor"></a><code><span class="keyword">class</span> <span class="keyword">type</span>  <a href="class-type-empty/index.html">empty</a>{ ... }</code>
    </div>
-   <div class="spec class-type lang-ocaml" id="class-type-mutually">
+   <div class="spec class-type syntax-ocaml" id="class-type-mutually">
     <a href="#class-type-mutually" class="anchor"></a><code><span class="keyword">class</span> <span class="keyword">type</span>  <a href="class-type-mutually/index.html">mutually</a>{ ... }</code>
    </div>
-   <div class="spec class-type lang-ocaml" id="class-type-recursive">
+   <div class="spec class-type syntax-ocaml" id="class-type-recursive">
     <a href="#class-type-recursive" class="anchor"></a><code><span class="keyword">and</span>  <a href="class-type-recursive/index.html">recursive</a>{ ... }</code>
    </div>
-   <div class="spec class lang-ocaml" id="class-mutually'">
+   <div class="spec class syntax-ocaml" id="class-mutually'">
     <a href="#class-mutually'" class="anchor"></a><code><span class="keyword">class</span>  <a href="class-mutually'/index.html">mutually'</a>: <a href="class-type-mutually/index.html">mutually</a></code>
    </div>
-   <div class="spec class lang-ocaml" id="class-recursive'">
+   <div class="spec class syntax-ocaml" id="class-recursive'">
     <a href="#class-recursive'" class="anchor"></a><code><span class="keyword">and</span>  <a href="class-recursive'/index.html">recursive'</a>: <a href="class-type-recursive/index.html">recursive</a></code>
    </div>
-   <div class="spec class-type lang-ocaml" id="class-type-empty_virtual">
+   <div class="spec class-type syntax-ocaml" id="class-type-empty_virtual">
     <a href="#class-type-empty_virtual" class="anchor"></a><code><span class="keyword">class</span> <span class="keyword">type</span> <span class="keyword">virtual</span>  <a href="class-type-empty_virtual/index.html">empty_virtual</a>{ ... }</code>
    </div>
-   <div class="spec class lang-ocaml" id="class-empty_virtual'">
+   <div class="spec class syntax-ocaml" id="class-empty_virtual'">
     <a href="#class-empty_virtual'" class="anchor"></a><code><span class="keyword">class</span> <span class="keyword">virtual</span>  <a href="class-empty_virtual'/index.html">empty_virtual'</a>: <a href="class-type-empty/index.html">empty</a></code>
    </div>
-   <div class="spec class-type lang-ocaml" id="class-type-polymorphic">
+   <div class="spec class-type syntax-ocaml" id="class-type-polymorphic">
     <a href="#class-type-polymorphic" class="anchor"></a><code><span class="keyword">class</span> <span class="keyword">type</span> ('a) <a href="class-type-polymorphic/index.html">polymorphic</a>{ ... }</code>
    </div>
-   <div class="spec class lang-ocaml" id="class-polymorphic'">
+   <div class="spec class syntax-ocaml" id="class-polymorphic'">
     <a href="#class-polymorphic'" class="anchor"></a><code><span class="keyword">class</span> ('a) <a href="class-polymorphic'/index.html">polymorphic'</a>: <a href="class-type-polymorphic/index.html">polymorphic</a>(<span class="type-var">'a</span>)</code>
    </div>
   </div>

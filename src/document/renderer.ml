@@ -28,5 +28,5 @@ let document_of_page ~syntax v =
 
 let document_of_compilation_unit ~syntax v =
   match syntax with
-  | Reason -> Reml.compilation_unit v
-  | OCaml -> ML.compilation_unit v
+  | Reason -> Reason.compilation_unit v
+  | OCaml -> Reml.compilation_unit v

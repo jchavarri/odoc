@@ -11,6 +11,47 @@
   <script>
    hljs.initHighlightingOnLoad();
   </script>
+  <script>
+   document.addEventListener('DOMContentLoaded', () => {
+        const SYNTAXES = ['ocaml', 'reason']
+        const CLASS_PREFIX = 'syntax__'
+        const ocamlInputId = 'radio-ocaml'
+        const reasonInputId = 'radio-reason'
+        let $toggleSyntaxDiv = document.createElement('div')
+        let currentSyntax = localStorage.getItem('syntax') || SYNTAXES[0]
+        let checked = `checked="checked"`
+        
+        $toggleSyntaxDiv.innerHTML = `
+          <div style="float:right;">
+            <input type="radio" id="${ocamlInputId}" name="syntax" value="ocaml" ${currentSyntax == 'ocaml' ? checked : ""}>
+            <label for="${ocamlInputId}"><code>ml</code></label>
+            <input type="radio" id="${reasonInputId}" name="syntax" value="reason" ${currentSyntax == 'reason' ? checked : ""}>
+            <label for="${reasonInputId}"><code>re</code></label>
+          </div>
+        `.trim()
+        $toggleSyntaxDiv = $toggleSyntaxDiv.firstChild
+        document.querySelector('body > nav').appendChild($toggleSyntaxDiv);
+  
+        let setCurrentSyntax = (syntax) => {
+          document.body.classList.remove(`${CLASS_PREFIX}${currentSyntax}`)
+          document.body.classList.add(`${CLASS_PREFIX}${syntax}`)
+  
+          currentSyntax = syntax
+          localStorage.setItem('syntax', currentSyntax)
+        }
+  
+        setCurrentSyntax(currentSyntax)
+  
+        const $ocamlInputEl = document.getElementById(ocamlInputId);
+        $ocamlInputEl.addEventListener('click', (el) => {
+          setCurrentSyntax(el.target.value)
+        })
+        const $reasonInputEl = document.getElementById(reasonInputId)
+        $reasonInputEl.addEventListener('click', (el) => {
+          setCurrentSyntax(el.target.value)
+        })
+      })
+  </script>
  </head>
  <body>
   <nav>
@@ -26,7 +67,7 @@
   </header>
   <div class="content">
    <div>
-    <div class="spec value lang-ocaml" id="val-foo">
+    <div class="spec value syntax-ocaml" id="val-foo">
      <a href="#val-foo" class="anchor"></a><code><span class="keyword">let</span> foo: int;</code>
     </div>
     <div>
@@ -46,10 +87,10 @@
      Now, we have a nested module, and it has a stop comment between its two items. We want to see that the first item is displayed, but the second is missing, and the stop comment disables documenation only in that module, and not in this outer module.
     </p>
    </aside>
-   <div class="spec module lang-ocaml" id="module-N">
+   <div class="spec module syntax-ocaml" id="module-N">
     <a href="#module-N" class="anchor"></a><code><span class="keyword">module</span> <a href="N/index.html">N</a>: { ... };</code>
    </div>
-   <div class="spec value lang-ocaml" id="val-lol">
+   <div class="spec value syntax-ocaml" id="val-lol">
     <a href="#val-lol" class="anchor"></a><code><span class="keyword">let</span> lol: int;</code>
    </div>
   </div>

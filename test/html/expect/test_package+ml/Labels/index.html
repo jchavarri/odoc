@@ -11,6 +11,47 @@
   <script>
    hljs.initHighlightingOnLoad();
   </script>
+  <script>
+   document.addEventListener('DOMContentLoaded', () => {
+        const SYNTAXES = ['ocaml', 'reason']
+        const CLASS_PREFIX = 'syntax__'
+        const ocamlInputId = 'radio-ocaml'
+        const reasonInputId = 'radio-reason'
+        let $toggleSyntaxDiv = document.createElement('div')
+        let currentSyntax = localStorage.getItem('syntax') || SYNTAXES[0]
+        let checked = `checked="checked"`
+        
+        $toggleSyntaxDiv.innerHTML = `
+          <div style="float:right;">
+            <input type="radio" id="${ocamlInputId}" name="syntax" value="ocaml" ${currentSyntax == 'ocaml' ? checked : ""}>
+            <label for="${ocamlInputId}"><code>ml</code></label>
+            <input type="radio" id="${reasonInputId}" name="syntax" value="reason" ${currentSyntax == 'reason' ? checked : ""}>
+            <label for="${reasonInputId}"><code>re</code></label>
+          </div>
+        `.trim()
+        $toggleSyntaxDiv = $toggleSyntaxDiv.firstChild
+        document.querySelector('body > nav').appendChild($toggleSyntaxDiv);
+  
+        let setCurrentSyntax = (syntax) => {
+          document.body.classList.remove(`${CLASS_PREFIX}${currentSyntax}`)
+          document.body.classList.add(`${CLASS_PREFIX}${syntax}`)
+  
+          currentSyntax = syntax
+          localStorage.setItem('syntax', currentSyntax)
+        }
+  
+        setCurrentSyntax(currentSyntax)
+  
+        const $ocamlInputEl = document.getElementById(ocamlInputId);
+        $ocamlInputEl.addEventListener('click', (el) => {
+          setCurrentSyntax(el.target.value)
+        })
+        const $reasonInputEl = document.getElementById(reasonInputId)
+        $reasonInputEl.addEventListener('click', (el) => {
+          setCurrentSyntax(el.target.value)
+        })
+      })
+  </script>
  </head>
  <body>
   <nav>
@@ -35,12 +76,15 @@
    <h2 id="L2">
     <a href="#L2" class="anchor"></a>Attached to nothing
    </h2>
-   <div class="spec module lang-ocaml" id="module-A">
+   <div class="spec module syntax-ocaml" id="module-A">
     <a href="#module-A" class="anchor"></a><code><span class="keyword">module</span> <a href="A/index.html">A</a> : <span class="keyword">sig</span> ... <span class="keyword">end</span></code>
    </div>
    <div>
-    <div class="spec type lang-ocaml" id="type-t">
+    <div class="spec type syntax-ocaml" id="type-t">
      <a href="#type-t" class="anchor"></a><code><span class="keyword">type</span> t</code>
+    </div>
+    <div class="spec type syntax-reason" id="type-t">
+     <a href="#type-t" class="anchor"></a><code><span class="keyword">type</span> t;</code>
     </div>
     <div>
      <p>
@@ -49,7 +93,7 @@
     </div>
    </div>
    <div>
-    <div class="spec value lang-ocaml" id="val-f">
+    <div class="spec value syntax-ocaml" id="val-f">
      <a href="#val-f" class="anchor"></a><code><span class="keyword">val</span> f : <a href="index.html#type-t">t</a></code>
     </div>
     <div>
@@ -59,7 +103,7 @@
     </div>
    </div>
    <div>
-    <div class="spec external lang-ocaml" id="val-e">
+    <div class="spec external syntax-ocaml" id="val-e">
      <a href="#val-e" class="anchor"></a><code><span class="keyword">val</span> e : unit <span>-&gt;</span> <a href="index.html#type-t">t</a></code>
     </div>
     <div>
@@ -68,17 +112,17 @@
      </p>
     </div>
    </div>
-   <div class="spec module-type lang-ocaml" id="module-type-S">
+   <div class="spec module-type syntax-ocaml" id="module-type-S">
     <a href="#module-type-S" class="anchor"></a><code><span class="keyword">module</span> <span class="keyword">type</span> <a href="module-type-S/index.html">S</a> = <span class="keyword">sig</span> ... <span class="keyword">end</span></code>
    </div>
-   <div class="spec class lang-ocaml" id="class-c">
+   <div class="spec class syntax-ocaml" id="class-c">
     <a href="#class-c" class="anchor"></a><code><span class="keyword">class</span>  <a href="class-c/index.html">c</a> : <span class="keyword">object</span> ... <span class="keyword">end</span></code>
    </div>
-   <div class="spec class-type lang-ocaml" id="class-type-cs">
+   <div class="spec class-type syntax-ocaml" id="class-type-cs">
     <a href="#class-type-cs" class="anchor"></a><code><span class="keyword">class</span> <span class="keyword">type</span>  <a href="class-type-cs/index.html">cs</a><span class="keyword">object</span> ... <span class="keyword">end</span></code>
    </div>
    <div>
-    <div class="spec exception lang-ocaml" id="exception-E">
+    <div class="spec exception syntax-ocaml" id="exception-E">
      <a href="#exception-E" class="anchor"></a><code><span class="keyword">exception</span> <span class="exception">E</span></code>
     </div>
     <div>
@@ -87,11 +131,14 @@
      </p>
     </div>
    </div>
-   <div class="spec type lang-ocaml" id="type-x">
+   <div class="spec type syntax-ocaml" id="type-x">
     <a href="#type-x" class="anchor"></a><code><span class="keyword">type</span> x = ..</code>
    </div>
+   <div class="spec type syntax-reason" id="type-x">
+    <a href="#type-x" class="anchor"></a><code><span class="keyword">type</span> x = ..;</code>
+   </div>
    <div>
-    <div class="spec extension lang-ocaml">
+    <div class="spec extension syntax-ocaml">
      <code><span class="keyword">type</span> <a href="index.html#type-x">x</a> += </code>
      <table>
       <tbody>
@@ -110,7 +157,7 @@
     </div>
    </div>
    <div>
-    <div class="spec module-substitution lang-ocaml" id="module-S">
+    <div class="spec module-substitution syntax-ocaml" id="module-S">
      <a href="#module-S" class="anchor"></a><code><span class="keyword">module</span> S := <a href="A/index.html">A</a></code>
     </div>
     <div>
@@ -120,8 +167,11 @@
     </div>
    </div>
    <div>
-    <div class="spec type-subst lang-ocaml" id="type-s">
+    <div class="spec type-subst syntax-ocaml" id="type-s">
      <a href="#type-s" class="anchor"></a><code><span class="keyword">type</span> s := <a href="index.html#type-t">t</a></code>
+    </div>
+    <div class="spec type-subst syntax-reason" id="type-s">
+     <a href="#type-s" class="anchor"></a><code><span class="keyword">type</span> s := <a href="index.html#type-t">t</a>;</code>
     </div>
     <div>
      <p>
@@ -129,7 +179,7 @@
      </p>
     </div>
    </div>
-   <div class="spec type lang-ocaml" id="type-u">
+   <div class="spec type syntax-ocaml" id="type-u">
     <a href="#type-u" class="anchor"></a><code><span class="keyword">type</span> u = </code>
     <table>
      <tbody>
@@ -146,7 +196,25 @@
      </tbody>
     </table>
    </div>
-   <div class="spec type lang-ocaml" id="type-v">
+   <div class="spec type syntax-reason" id="type-u">
+    <a href="#type-u" class="anchor"></a><code><span class="keyword">type</span> u = </code>
+    <table>
+     <tbody>
+      <tr id="type-u.A'" class="anchored">
+       <td class="def variant constructor">
+        <a href="#type-u.A'" class="anchor"></a><code>| <span class="constructor">A'</span></code>
+       </td>
+       <td class="doc">
+        <p>
+         Attached to constructor
+        </p>
+       </td>
+      </tr>
+     </tbody>
+    </table>
+    <code>;</code>
+   </div>
+   <div class="spec type syntax-ocaml" id="type-v">
     <a href="#type-v" class="anchor"></a><code><span class="keyword">type</span> v = {</code>
     <table>
      <tbody>
@@ -163,6 +231,24 @@
      </tbody>
     </table>
     <code>}</code>
+   </div>
+   <div class="spec type syntax-reason" id="type-v">
+    <a href="#type-v" class="anchor"></a><code><span class="keyword">type</span> v = {</code>
+    <table>
+     <tbody>
+      <tr id="type-v.f" class="anchored">
+       <td class="def record field">
+        <a href="#type-v.f" class="anchor"></a><code>f: <a href="index.html#type-t">t</a>,</code>
+       </td>
+       <td class="doc">
+        <p>
+         Attached to field
+        </p>
+       </td>
+      </tr>
+     </tbody>
+    </table>
+    <code>};</code>
    </div>
    <aside>
     <p>

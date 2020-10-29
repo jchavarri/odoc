@@ -896,6 +896,16 @@ h1+.modules, h1+.sel {
   text-decoration: underline;
 }
 
+.syntax-reason,
+.syntax-ocaml {
+  display: none;
+}
+
+.syntax__reason .syntax-reason,
+.syntax__ocaml .syntax-ocaml {
+  display: block;
+}
+
 /*---------------------------------------------------------------------------
    Copyright (c) 2016 The odoc contributors
 

@@ -68,6 +68,45 @@ let page_creator ?(theme_uri = Relative "./") ~url name header toc content =
                   Html.a_content "width=device-width,initial-scale=1.0"; ] ();
       Html.script ~a:[Html.a_src highlight_js_uri] (Html.txt "");
       Html.script (Html.txt "hljs.initHighlightingOnLoad();");
+      Html.script (Html.Unsafe.data "document.addEventListener('DOMContentLoaded', () => {
+        const SYNTAXES = ['ocaml', 'reason']
+        const CLASS_PREFIX = 'syntax__'
+        const ocamlInputId = 'radio-ocaml'
+        const reasonInputId = 'radio-reason'
+        let $toggleSyntaxDiv = document.createElement('div')
+        let currentSyntax = localStorage.getItem('syntax') || SYNTAXES[0]
+        let checked = `checked=\"checked\"`
+        
+        $toggleSyntaxDiv.innerHTML = `
+          <div style=\"float:right;\">
+            <input type=\"radio\" id=\"${ocamlInputId}\" name=\"syntax\" value=\"ocaml\" ${currentSyntax == 'ocaml' ? checked : \"\"}>
+            <label for=\"${ocamlInputId}\"><code>ml</code></label>
+            <input type=\"radio\" id=\"${reasonInputId}\" name=\"syntax\" value=\"reason\" ${currentSyntax == 'reason' ? checked : \"\"}>
+            <label for=\"${reasonInputId}\"><code>re</code></label>
+          </div>
+        `.trim()
+        $toggleSyntaxDiv = $toggleSyntaxDiv.firstChild
+        document.querySelector('body > nav').appendChild($toggleSyntaxDiv);
+  
+        let setCurrentSyntax = (syntax) => {
+          document.body.classList.remove(`${CLASS_PREFIX}${currentSyntax}`)
+          document.body.classList.add(`${CLASS_PREFIX}${syntax}`)
+  
+          currentSyntax = syntax
+          localStorage.setItem('syntax', currentSyntax)
+        }
+  
+        setCurrentSyntax(currentSyntax)
+  
+        const $ocamlInputEl = document.getElementById(ocamlInputId);
+        $ocamlInputEl.addEventListener('click', (el) => {
+          setCurrentSyntax(el.target.value)
+        })
+        const $reasonInputEl = document.getElementById(reasonInputId)
+        $reasonInputEl.addEventListener('click', (el) => {
+          setCurrentSyntax(el.target.value)
+        })
+      })")
     ]
   in
 
